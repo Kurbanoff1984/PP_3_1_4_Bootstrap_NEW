@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:table-layout="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>All people</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="header">
+    <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
+        <div class="container-fluid ">
+            <span></span>
+            <span class="navbar-brand" th:text="${user.getUsername()} + ' with role: ' + ${user.getRolesString()}">th:text=""</span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDark"
+                    aria-controls="navbarDark" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse show" id="navbarDark">
+                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                </ul>
+                <form class="d-flex" th:method="get" th:action="@{/logout}">
+                    <button class="btn btn-outline-light" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<section>
+    <div class="container-fluid pt-2">
+        <div class="row">
+            <div class="col-sm-2 bg-white vh-100 px-0">
+                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            data-bs-target="#left-button-user" type="button" role="tab" aria-controls="v-pills-profile"
+                            aria-selected="true">User
+                    </button>
+                </div>
+            </div>
+            <div class="col-10 bg-light">
+                <div class="tab-content " id="v-pills-tabContent">
+                    <div class="tab-pane fade show active bg-light" id="left-button-user" role="tabpanel"
+                         aria-labelledby="v-pills-profile-tab">
+                        <h1 class="d-flex align-content-center flex-wrap">User information-page</h1>
+                        <div class="container" aria-hidden="true">
+                            <table class="table table-striped table-bordered table-hover caption-top">
+                                <h5 class="d-flex align-content-center flex-wrap">About user</h5>
+                                <div class="tab-pane fade " id="showOneUser">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead class="table-while">
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Surname</th>
+                                            <th scope="col">Age</th>
+                                            <th scope="col">Role</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <td th:text="${user.getId()}">
+                                        <td th:text="${user.getUsername()}">
+                                        <td th:text="${user.getSurname()}">
+                                        <td th:text="${user.getAge()}">
+                                        <td><a th:each="role : ${user.getRolesString()}"
+                                               th:text="|${role} |"/>
+                                        </td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+</html>
