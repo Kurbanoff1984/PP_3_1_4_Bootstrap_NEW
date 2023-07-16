@@ -6,10 +6,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username")
+        }
+)
 public class User implements UserDetails {
 
     @Id
@@ -26,17 +33,27 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable
-    private Set<Role> roles;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "role"))
+    private List<Role> roles;
 
     public User() {
+
     }
 
-    public User(String username, String surname, int age, String password, Set<Role> roles) {
+    public User(String username, String surname, int age, String password, List<Role> roles) {
         this.username = username;
         this.surname = surname;
         this.age = age;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(String username, String password, List<Role> roles) {
+        this.username = username;
         this.password = password;
         this.roles = roles;
     }
@@ -75,10 +92,11 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public List<Role> getAuthorities() {
+        return roles.stream()
+                .map(role -> new Role(role.getName()))
+                .collect(Collectors.toList());
     }
-
     @Override
     public String getPassword() {
         return password;
@@ -116,15 +134,15 @@ public class User implements UserDetails {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
-    //
+
     public String getRolesString() {
         return getRoles().toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("ROLE_", "");
     }
